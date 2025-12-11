@@ -161,4 +161,10 @@ setupModal(modal_9, 9, options3, options3);
 // ずらしたモーダル
 setupModal(modal2_1, 21, options1, options11);
 setupModal(modal2_2, 22, options1, options22);
-setupModal(modal2
+setupModal(modal2_3, 23, options1, options33);
+setupModal(modal2_4, 24, options2, options11);
+setupModal(modal2_5, 25, options2, options22);
+setupModal(modal2_6, 26, options2, options33);
+setupModal(modal2_7, 27, options3, options11);
+setupModal(modal2_8, 28, options3, options22);
+setupModal(modal2_9, 29, options3, options33);
