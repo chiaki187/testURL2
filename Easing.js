@@ -1,4 +1,4 @@
-// モーダル達
+// モーダルボタン
 const modal_1 = document.querySelector("#modal_btn_1");
 const modal_2 = document.querySelector("#modal_btn_2");
 const modal_3 = document.querySelector("#modal_btn_3");
@@ -9,7 +9,7 @@ const modal_7 = document.querySelector("#modal_btn_7");
 const modal_8 = document.querySelector("#modal_btn_8");
 const modal_9 = document.querySelector("#modal_btn_9");
 
-// ずれを入れたとき
+// 少しずれたモーダル
 const modal2_1 = document.querySelector("#modal2_btn_1");
 const modal2_2 = document.querySelector("#modal2_btn_2");
 const modal2_3 = document.querySelector("#modal2_btn_3");
@@ -24,7 +24,7 @@ const modal2_9 = document.querySelector("#modal2_btn_9");
 const duration = 700;
 const dduration = 200;
 
-// どのアニメーションでモーダルを閉じるのか
+// どのアニメーションでモーダルを閉じるか
 let closeType = 1;
 
 const close = document.querySelector("#close");
@@ -32,16 +32,16 @@ const modal = document.querySelector("#modal");
 const mask = document.querySelector("#mask");
 const height = window.innerHeight;
 
-// 強調
+// モーダル表示・非表示の keyframes
 const showKeyframes = {
   opacity: [1, 1],
-  transform: [`translate(0, ${height}px)`, "translate(0, 0)"],
+  translate: [`0 ${height}px`, "0 0"],
   visibility: "visible"
 };
 
 const hideKeyframes = {
   opacity: [1, 1],
-  transform: ["translate(0, 0)", `translate(0, ${height}px)`],
+  translate: ["0 0", `0 ${height}px`],
   visibility: "hidden"
 };
 
@@ -56,46 +56,15 @@ const hideKeyframesMask = {
 };
 
 // アニメーションオプション
-const options1 = {
-  duration: duration,
-  easing: "ease",
-  fill: "forwards"
-};
-const options11 = {
-  duration: duration,
-  delay: dduration,
-  easing: "ease",
-  fill: "forwards"
-};
-
-const options2 = {
-  duration: duration,
-  easing: "cubic-bezier(0.05, 0.7, 0.1, 1.0)",
-  fill: "forwards"
-};
-const options22 = {
-  duration: duration,
-  delay: dduration,
-  easing: "cubic-bezier(0.05, 0.7, 0.1, 1.0)",
-  fill: "forwards"
-};
-
-const options3 = {
-  duration: duration,
-  easing: "ease",
-  fill: "forwards"
-};
-const options33 = {
-  duration: duration,
-  delay: dduration, // typo修正: deray → delay
-  easing: "ease",
-  fill: "forwards"
-};
+const options1 = { duration: duration, easing: "ease", fill: "forwards" };
+const options11 = { duration: duration, delay: dduration, easing: "ease", fill: "forwards" };
+const options2 = { duration: duration, easing: "cubic-bezier(0.05, 0.7, 0.1, 1.0)", fill: "forwards" };
+const options22 = { duration: duration, delay: dduration, easing: "cubic-bezier(0.05, 0.7, 0.1, 1.0)", fill: "forwards" };
+const options3 = { duration: duration, easing: "ease", fill: "forwards" };
+const options33 = { duration: duration, delay: dduration, easing: "ease", fill: "forwards" };
 
 // モーダルを閉じる
 close.addEventListener("click", () => {
-  if (!modal || !mask) return;
-
   if (closeType === 1) {
     modal.animate(hideKeyframes, options1);
     mask.animate(hideKeyframesMask, options1);
@@ -124,47 +93,49 @@ close.addEventListener("click", () => {
     modal.animate(hideKeyframes, options3);
     mask.animate(hideKeyframesMask, options3);
   } else if (closeType >= 21 && closeType <= 29) {
-    const modIndex = closeType % 10;
-    const optionModal = [options1, options2, options3][Math.floor((closeType - 21) / 3)];
-    const optionMask = [options11, options22, options33][modIndex - 1];
-    modal.animate(hideKeyframes, optionModal);
-    mask.animate(hideKeyframesMask, optionMask);
+    let modalOption = options1;
+    let maskOption;
+    if ([21,22,23].includes(closeType)) modalOption = options1;
+    else if ([24,25,26].includes(closeType)) modalOption = options2;
+    else modalOption = options3;
+
+    if ([21,24,27].includes(closeType)) maskOption = options11;
+    else if ([22,25,28].includes(closeType)) maskOption = options22;
+    else maskOption = options33;
+
+    modal.animate(hideKeyframes, modalOption);
+    mask.animate(hideKeyframesMask, maskOption);
   }
 });
 
-mask.addEventListener("click", () => {
-  close.click();
-});
+// マスククリックでも閉じる
+mask.addEventListener("click", () => close.click());
 
-// モーダルを開く関数
-function setupModal(button, type, optionModal, optionMask) {
-  if (!button) return;
-  button.addEventListener("click", () => {
-    closeType = type;
-    if (!modal || !mask) return;
-    modal.animate(showKeyframes, optionModal);
-    mask.animate(showKeyframesMask, optionMask);
-  });
+// モーダル開く関数
+function openModal(modalIndex, modalOption, maskOption) {
+  closeType = modalIndex;
+  modal.animate(showKeyframes, modalOption);
+  mask.animate(showKeyframesMask, maskOption);
 }
 
 // 通常モーダル
-setupModal(modal_1, 1, options1, options1);
-setupModal(modal_2, 2, options1, options2);
-setupModal(modal_3, 3, options1, options3);
-setupModal(modal_4, 4, options2, options1);
-setupModal(modal_5, 5, options2, options2);
-setupModal(modal_6, 6, options2, options3);
-setupModal(modal_7, 7, options3, options1);
-setupModal(modal_8, 8, options3, options2);
-setupModal(modal_9, 9, options3, options3);
+modal_1.addEventListener("click", () => openModal(1, options1, options1));
+modal_2.addEventListener("click", () => openModal(2, options1, options2));
+modal_3.addEventListener("click", () => openModal(3, options1, options3));
+modal_4.addEventListener("click", () => openModal(4, options2, options1));
+modal_5.addEventListener("click", () => openModal(5, options2, options2));
+modal_6.addEventListener("click", () => openModal(6, options2, options3));
+modal_7.addEventListener("click", () => openModal(7, options3, options1));
+modal_8.addEventListener("click", () => openModal(8, options3, options2));
+modal_9.addEventListener("click", () => openModal(9, options3, options3));
 
-// ずらしたモーダル
-setupModal(modal2_1, 21, options1, options11);
-setupModal(modal2_2, 22, options1, options22);
-setupModal(modal2_3, 23, options1, options33);
-setupModal(modal2_4, 24, options2, options11);
-setupModal(modal2_5, 25, options2, options22);
-setupModal(modal2_6, 26, options2, options33);
-setupModal(modal2_7, 27, options3, options11);
-setupModal(modal2_8, 28, options3, options22);
-setupModal(modal2_9, 29, options3, options33);
+// ずれモーダル
+modal2_1.addEventListener("click", () => openModal(21, options1, options11));
+modal2_2.addEventListener("click", () => openModal(22, options1, options22));
+modal2_3.addEventListener("click", () => openModal(23, options1, options33));
+modal2_4.addEventListener("click", () => openModal(24, options2, options11));
+modal2_5.addEventListener("click", () => openModal(25, options2, options22));
+modal2_6.addEventListener("click", () => openModal(26, options2, options33));
+modal2_7.addEventListener("click", () => openModal(27, options3, options11));
+modal2_8.addEventListener("click", () => openModal(28, options3, options22));
+modal2_9.addEventListener("click", () => openModal(29, options3, options33));
