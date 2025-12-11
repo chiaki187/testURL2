@@ -1,0 +1,47 @@
+html {
+  scrollbar-gutter: stable;
+}
+body {
+    text-align: center;
+    padding: 1rem;
+}
+h1,
+p {
+    margin-bottom: 2rem;
+}
+
+.original_btn{
+    background: rgb(136, 164, 255);
+    border: none;
+    border-radius: .5rem;
+    padding: 1rem 2rem;
+    cursor: pointer;
+}
+#mask {
+    background: rgba(0, 0, 0, .8);
+    position: fixed;
+    inset: 0;
+    z-index: 9998;
+    opacity: 0;
+    visibility: hidden;
+}
+#modal {
+    background: #fff;
+    width: 30rem;
+    padding: 2rem;
+    border-radius: .5rem;
+    position: absolute;
+    top: 50%;
+    transform: translateY(50%);
+    inset: 10rem 0 auto;
+    margin: auto;
+    z-index: 9999;
+    opacity: 0;
+    visibility: hidden;
+}
+
+.btn_box{
+    display:grid;
+    grid-template-columns: repeat(3, auto); /* 横に3つ並べる */
+    gap: 2rem;
+}
